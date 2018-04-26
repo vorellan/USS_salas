@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<link rel="stylesheet" type="text/css" href="css/ionic.css">
+    <title>Posicionamiento con HTML , JavaScript y Google Maps</title>
+    <meta charset="UTF-8">
+    <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js?ver=3.1.2'></script>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCvuaPD51eGqz7h8KWDHKaBCk3guKtB_2A&sensor=true"></script>
+	<style type="text/css">
+		html, body {
+		height: 100%;
+		margin: 0;
+		padding: 0;
+		}
+		#mapa_content {
+			height: 100%;
+			;
+		}
+		@media print {
+			html, body {
+			height: auto;
+		}
+		#mapa_content {
+			height: 650px;
+		}
+	</style>
+	<script type="text/javascript"> 
+
+		var mapa;
+
+		function inicializar() {
+			var opciones = {
+			  zoom: 12,
+			  mapTypeId: google.maps.MapTypeId.ROADMAP,
+
+   			 	panControl: false,
+    			zoomControl: true,
+    			mapTypeControl: false,
+    			scaleControl: true,
+    			streetViewControl: false,
+    			overviewMapControl: false,
+    			rotateControl: false
+
+			};
+			mapa = new google.maps.Map(document.getElementById('mapa_content'), opciones);
+			if (navigator.geolocation)
+			{
+			    //Hago el CallBack a mostrarLocalizacion
+				navigator.geolocation.getCurrentPosition(mostrarLocalizacion,manejadorDeError);
+			}
+			else{
+			    //Caso contraio muestro error
+				alert("Dispositivo incompatible con Geolocalizacion");
+				}
+		}
+
+	    function mostrarLocalizacion(posicion)
+	     {
+            var pos = new google.maps.LatLng(posicion.coords.latitude,posicion.coords.longitude);
+            var lon = posicion.coords.longitude;
+            var lat = posicion.coords.latitude;
+            //Muestro un tooltip con un mensaje sobre el mapa
+            var infowindow = new google.maps.InfoWindow({
+              map: mapa,
+              position: pos,
+              content: 'Usted esta en este lugar.'
+            });
+
+            mapa.setCenter(pos);
+	      }
+
+	    function manejadorDeError(error) {
+
+		   switch(error.code)
+            {
+                case error.PERMISSION_DENIED: alert("GPS desactivado");
+                break;
+
+                case error.POSITION_UNAVAILABLE: alert("No se ha encontrado la ubicacion actual");
+                break;
+
+                case error.TIMEOUT: alert("Tiempo de espera agotado");
+                break;
+
+                default: alert("Error ");
+                break;
+            }
+			var opciones = {
+			  map: mapa,
+			  position: new google.maps.LatLng(60, 105),
+			  content: content
+			};
+			var infowindow = new google.maps.InfoWindow(opciones);
+			mapa.setCenter(opciones.position);
+      }
+      google.maps.event.addDomListener(window, 'load', inicializar);
+  
+    </script>
+  </head>
+  <body>
+	  <div class="bar bar-header bar-positive" ">
+	 <a href="index.html" class="button button-clear">Activo</a>
+	 <a href="index.html" class="button button-clear">Historial</a>
+	 <a href="insert.html" class="button button-clear">Perfil</a>
+	 <a href="insert.html" class="button button-clear">Buscar</a>
+	 <a href="index.html" class="button button-clear">Tokens</a>
+	 </div>
+      <div id="mapa_content" style= "width: 80%; height: 70%; margin-left:10%; margin-top:15%;"></div>  <!-- Div contenedor del mapa -->
+  </body>
+
+  //<?php $latitud = $_GET["lat"]; ?>
+  //<?php $longitud = $_GET["lon"];?>
+</html>

@@ -1,0 +1,60 @@
+<html>
+	<head>
+	<link rel="stylesheet" type="text/css" href="css/ionic.css">
+	</head>
+	<body>
+	<br><br>
+	<center><IMG SRC="uss.jpg" WIDTH=200 HEIGHT=140 BORDER=2 ></center>
+	<div class="bar bar-header bar-positive" ">
+	<a href="ahora.html" class="button button-clear">Ahora</a>
+	<a href="dia.html" class="button button-clear">Dia</a>
+	<a href="index.html" class="button button-clear">Informacion</a>
+	<a href="index.html" class="button button-clear"></a>
+	
+	</div>
+	<ul class="list" id="listview">
+	</ul>
+	<section id="content"><h1>INFORMACION</h1></section>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+	<script>
+		$(document).on("ready", function(){
+			loadData();
+		});
+		
+		var loadData = function(){
+			$.ajax({
+				type:"POST",
+				url:"http://salasapp.coolpage.biz/json.php"
+			
+			}).done(function(data){
+				console.log(data);
+				var users = JSON.parse(data);
+				for(var i in users){
+					$("#content").append("Fecha:"+users[i].fecha + " Hora: "+users[i].hora+ " "+users[i].nombre + " "+users[i].seccion_id +"<br>"+ "<b>Aviso</b>: "+"<br><b><font size=3>"+users[i].informacion +"</b></font>"+ " "+ "<br>"+ "--------------------------------------------------------------------------- "+ "<br>");
+				}
+			});
+			
+		}
+	</script>
+	
+	</body>
+
+
+</html>
+
+<?
+if (isset($_SERVER['HTTP_ORIGIN'])) {  
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");  
+    header('Access-Control-Allow-Credentials: true');  
+    header('Access-Control-Max-Age: 86400');   
+}  
+  
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {  
+  
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))  
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");  
+  
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))  
+        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");  
+}  
+?>
